@@ -50,14 +50,20 @@ function applyColors(primary, secondary) {
 function applyFavicon(favicon) {
     if (!favicon) return;
 
-    let link = document.querySelector("link[rel~='icon']");
-    if (!link) {
-        link = document.createElement("link");
-        link.rel = "icon";
-        document.head.appendChild(link);
-    }
+    // Remove all existing favicon links
+    const links = document.querySelectorAll("link[rel~='icon']");
+    links.forEach(link => link.remove());
 
-    link.href = favicon;
+    // Force cache busting
+    const cacheBustedUrl = favicon + "?v=" + Date.now();
+
+    // Add new favicon
+    const newLink = document.createElement("link");
+    newLink.rel = "icon";
+    newLink.type = "image/png";
+    newLink.href = cacheBustedUrl;
+
+    document.head.appendChild(newLink);
 }
 
 function applyCustomCSS(css) {
