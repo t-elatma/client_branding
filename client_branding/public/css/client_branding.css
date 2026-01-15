@@ -1,0 +1,28 @@
+:root {
+    /* Fallback values if client has no branding */
+    --brand-primary: #2490ef;
+    --brand-secondary: #1c6ed5;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:hover {
+    background-color: var(--brand-primary) !important;
+    border-color: var(--brand-primary) !important;
+}
+
+/* Links */
+a {
+    color: var(--brand-primary);
+}
+
+/* Sidebar active indicator */
+.sidebar-item.selected {
+    border-left: 3px solid var(--brand-primary);
+}
+
+/* Progress bars */
+.progress-bar {
+    background-color: var(--brand-primary);
+}
