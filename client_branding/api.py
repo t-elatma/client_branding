@@ -3,16 +3,15 @@ import frappe
 @frappe.whitelist()
 def get_branding():
     """
-    Returns branding settings for the logged-in user's default company.
-    Safe for Frappe Cloud. No client-side company input accepted.
+    Returns branding for the logged-in user's default company.
+    Works on Frappe Cloud and modern ERPNext versions.
     """
 
-    user = frappe.session.user
-    if user == "Guest":
+    if frappe.session.user == "Guest":
         return {}
 
-    user_doc = frappe.get_doc("User", user)
-    company = user_doc.default_company
+    # ✅ Correct way to get default company
+    company = frappe.defaults.get_user_default("Company")
 
     if not company:
         return {}
