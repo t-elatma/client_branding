@@ -5,6 +5,7 @@ frappe.ready(() => {
             if (!r.message) return;
 
             const b = r.message;
+            console.log(b);
 
             applyLogo(b.logo);
             applyColors(b.primary_color, b.secondary_color);
