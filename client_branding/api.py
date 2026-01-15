@@ -4,21 +4,39 @@ import frappe
 def get_branding():
     """
     Returns branding for the logged-in user's default company.
-    Works on Frappe Cloud and modern ERPNext versions.
+    Returns empty dict if no company is found or accessible.
     """
 
-    if frappe.session.user == "Guest":
+    user = frappe.session.user
+    if user == "Guest":
         return {}
 
-    # ✅ Correct way to get default company
+    # 1️⃣ Get default company safely
     company = frappe.defaults.get_user_default("Company")
 
+    # 2️⃣ If default company is not set, try fallback
     if not company:
-        return {}
+        # Optionally, pick the first company user has permission for
+        permitted_companies = frappe.get_all(
+            "User Permission",
+            filters={
+                "user": user,
+                "allow": "Company"
+            },
+            fields=["for_value"]
+        )
+        if permitted_companies:
+            company = permitted_companies[0].for_value
+        else:
+            return {}  # no company at all
 
-    company_doc = frappe.get_doc("Company", company)
+    # 3️⃣ Try to get company document safely
+    try:
+        company_doc = frappe.get_doc("Company", company)
+    except frappe.DoesNotExistError:
+        return {}  # company deleted or invalid
 
-    # Use getattr defensively so missing fields never crash
+    # 4️⃣ Build branding object, fallback to None if fields missing
     return {
         "company": company,
         "logo": getattr(company_doc, "custom_brand_logo", None),
