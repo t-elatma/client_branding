@@ -1,19 +1,28 @@
-frappe.ready(() => {
-    frappe.call({
-        method: "client_branding.api.get_branding",
-        callback: (r) => {
-            if (!r.message) return;
 
-            const b = r.message;
-            console.log(b);
 
-            applyLogo(b.logo);
-            applyColors(b.primary_color, b.secondary_color);
-            applyFavicon(b.favicon);
-            applyCustomCSS(b.custom_css);
-        }
-    });
-});
+window.onload = function () {
+    if (window.frappe && typeof frappe.ready === 'function') {
+        frappe.ready(() => {
+            frappe.call({
+                method: "client_branding.api.get_branding",
+                callback: (r) => {
+                    if (!r.message) return;
+
+                    const b = r.message;
+                    console.log(b);
+
+                    applyLogo(b.logo);
+                    applyColors(b.primary_color, b.secondary_color);
+                    applyFavicon(b.favicon);
+                    applyCustomCSS(b.custom_css);
+                }
+            });
+        });
+    } else {
+        // Handle the case where frappe is still not available
+        console.error("Frappe is not defined or frappe.ready is not a function");
+    }
+};
 
 /* -------------------------------
    Branding helpers
