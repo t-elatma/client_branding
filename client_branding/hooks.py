@@ -84,11 +84,13 @@ app_include_js = "/assets/client_branding/js/client_branding.js"
 
 # before_install = "client_branding.install.before_install"
 # after_install = "client_branding.install.after_install"
+after_install = "client_branding.setup.setup_custom_fields"
 
 # Uninstallation
 # ------------
 
 # before_uninstall = "client_branding.uninstall.before_uninstall"
+before_uninstall = "client_branding.uninstall.cleanup"
 # after_uninstall = "client_branding.uninstall.after_uninstall"
 
 # Integration Setup
